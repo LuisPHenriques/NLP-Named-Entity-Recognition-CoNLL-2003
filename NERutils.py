@@ -5,6 +5,72 @@ import seaborn as sns
 
 from sklearn.metrics import confusion_matrix, classification_report
 
+
+#---------------------------------------------------------------------
+#Function to check if all tags features have the same length
+#---------------------------------------------------------------------    
+def tags_length(tags_features, data):
+
+    all_lengths_identical = True
+
+    # Iterate through rows and check lengths
+    for index, row in data.iterrows():
+        current_length = len(row[tags_features[0]])
+        for col in tags_features[1:]:
+            if current_length != len(row[col]):
+                print(f"Row {index}, Column {col}: Length mismatch!")
+                all_lengths_identical = False
+                break
+
+    if all_lengths_identical:
+        print("All rows have identical list lengths in the specified columns.")
+
+
+#---------------------------------------------------------------------
+#Function to print the occurrences of <OOV> appearences
+#---------------------------------------------------------------------    
+def oov_counter(tokenizer):
+    count = 0
+    target_value = 1
+    train_sequences = tokenizer.X_train.tolist()
+    dev_sequences = tokenizer.X_dev.tolist()
+    test_sequences = tokenizer.X_test.tolist()
+
+    # Iterate through each list and count occurrences of the target value
+    for sublist in train_sequences:
+        count += sublist.count(target_value)
+
+    print(f"The value <OOV> appears {count} times in the training sequences.")
+
+    count = 0
+    for sublist in dev_sequences:
+        count += sublist.count(target_value)
+
+    print(f"The value <OOV> appears {count} times in the development sequences.")
+
+    count = 0
+    for sublist in test_sequences:
+        count += sublist.count(target_value)
+
+    # Print the count
+    print(f"The value <OOV> appears {count} times in the test sequences.")
+
+
+#---------------------------------------------------------------------
+#Function to print the number of named-entities, including no entity
+#---------------------------------------------------------------------    
+def num_entities(tokenizer):
+    # Find the maximum value in the 2D array
+    max_value = float('-inf')  # Initialize with negative infinity
+
+    for row in tokenizer.Y_train.tolist():
+        for element in row:
+            if element > max_value:
+                max_value = element
+
+    print("Number of named entities (including no entity):", max_value + 1)
+
+
 #---------------------------------------------------------------------
 #Function to plot a graph based on the results derived
 #---------------------------------------------------------------------    

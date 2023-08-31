@@ -197,7 +197,7 @@ class NamedEntityRecognition_LSTM:
         """
 
         # Initialize a Sequential model
-        model=tf.keras.models.Sequential(name = model_name)
+        model = tf.keras.models.Sequential(name = model_name)
     
         # Weights regularizer (L2)
         regularizer = NamedEntityRecognition_LSTM._set_regularizer(self.regularizer, self.regularizer_lambda)

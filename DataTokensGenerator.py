@@ -19,7 +19,8 @@ class DataTokens():
         custom_filter (str): Characters to be filtered out during tokenization.
     """
 
-    def __init__(self, train_df, dev_df, test_df, phrases_column, entities_column, num_words = 100000, words_in_list = True, custom_filter = '!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~\t\n', mini_batch_size = 256):
+    def __init__(self, train_df, dev_df, test_df, phrases_column, entities_column, num_words = 100000, words_in_list = True, 
+                 custom_filter = '!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~\t\n', mini_batch_size = 256):
 
         self.train_df = train_df
         self.dev_df = dev_df
@@ -30,6 +31,22 @@ class DataTokens():
         self.words_in_list = words_in_list
         self.custom_filter = custom_filter
         self.mini_batch_size = mini_batch_size
+
+
+    def __repr__(self):
+        repr_str = (
+            f"Tokenizer Object\n"
+            f"=================\n"
+            f"Shape of preprocessed training tokens:      {self.X_train.shape}\n"
+            f"Shape of preprocessed development tokens:   {self.X_dev.shape}\n"
+            f"Shape of preprocessed testing tokens:       {self.X_test.shape}\n\n"
+            f"Shape of preprocessed training NER tags:    {self.Y_train.shape}\n"
+            f"Shape of preprocessed development NER tags: {self.Y_dev.shape}\n"
+            f"Shape of preprocessed testing NER tags:     {self.Y_test.shape}\n\n"
+            f"Tokens representation: {self.X_train[0]}\n"
+            f"NER tags representation: {self.Y_train[0]}"
+        )
+        return repr_str
 
 
     def TokenizePhrases(self):
@@ -84,9 +101,9 @@ class DataTokens():
         self.maxlen = maxlen
 
         # Pad the sequences to a uniform length
-        train_tokens = pad_sequences(train_tokens, padding = 'post', maxlen = maxlen)
-        dev_tokens = pad_sequences(dev_tokens, padding = 'post', maxlen = maxlen)  
-        test_tokens = pad_sequences(test_tokens, padding = 'post', maxlen = maxlen)
+        train_tokens = pad_sequences(train_tokens, padding = 'post', maxlen = self.maxlen)
+        dev_tokens = pad_sequences(dev_tokens, padding = 'post', maxlen = self.maxlen)  
+        test_tokens = pad_sequences(test_tokens, padding = 'post', maxlen = self.maxlen)
 
         self.X_train = train_tokens
         self.X_dev = dev_tokens
